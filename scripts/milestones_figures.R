@@ -80,20 +80,40 @@ plot_single <- function(draws, title) {
 }
 
 plot_combined <- function(draws_all) {
+  # Show ontogeny as a connected trajectory per group (treatment × sex).
+  # IMPORTANT: summarise posterior draws first, then connect summaries
+  # (otherwise you'd draw many "spaghetti" lines).
+
+  summ <- draws_all %>%
+    group_by(TREATMENT, SEX, Milestone_label) %>%
+    tidybayes::median_qi(Milestone_Age, .width = 0.95) %>%
+    ungroup()
+
+  y_min <- floor(min(summ$.lower, na.rm = TRUE) / 5) * 5
+  y_max <- ceiling(max(summ$.upper, na.rm = TRUE) / 5) * 5
+
   ggplot(
-    draws_all,
-    aes(x = Milestone_label, y = Milestone_Age, color = TREATMENT)
+    summ,
+    aes(
+      x = Milestone_label,
+      y = Milestone_Age,
+      color = TREATMENT,
+      group = TREATMENT
+    )
   ) +
-    ggdist::stat_pointinterval(
-      .width = 0.95,
-      point_size = 2,
-      interval_size = 0.8,
-      position = position_dodge(width = 0.55)
+    geom_line(linewidth = 0.9, alpha = 0.95) +
+    geom_errorbar(
+      aes(ymin = .lower, ymax = .upper),
+      width = 0.08,
+      linewidth = 0.6,
+      alpha = 0.9
     ) +
-    facet_wrap(~SEX) +
-    labs(x = "Developmental milestone", y = "Milestone age (days)", color = "Maternal treatment") +
+    geom_point(size = 2.2) +
+    facet_wrap(~SEX, nrow = 1) +
+    labs(x = "Developmental milestone (ontogeny)", y = "Milestone age (days)", color = "Maternal treatment") +
+    scale_y_continuous(breaks = seq(y_min, y_max, by = 5)) +
     theme_minimal(base_size = 12) +
-    theme(axis.text.x = element_text(angle = 25, hjust = 1))
+    theme(axis.text.x = element_text(angle = 15, hjust = 1))
 }
 
 semi_fit <- read_fit(paths$semi_model)
@@ -109,6 +129,11 @@ dig_peak_draws <- summarize_milestone(dig_peak_fit, dig_peak_dat, "DIG_PEAK", "P
 full_draws <- summarize_milestone(full_fit, full_dat, "FULL", "FULL (CC > DIG)")
 
 draws_all <- bind_rows(semi_draws, dig_peak_draws, full_draws)
+
+# Force ontogeny order in combined figure: SEMI → PEAK → FULL
+milestone_order <- c("SEMI (DIG > REP)", "PEAK DIG", "FULL (CC > DIG)")
+draws_all <- draws_all %>%
+  mutate(Milestone_label = factor(Milestone_label, levels = milestone_order))
 
 ggsave(
   filename = file.path(paths$figures_dir, "Milestone_SEMI.png"),

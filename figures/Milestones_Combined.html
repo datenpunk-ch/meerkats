@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Milestones — interactive</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    html, body { height: 100%; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    .wrap { padding: 12px 12px 8px; box-sizing: border-box; }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-start; margin-bottom: 10px; }
+    fieldset { border: 1px solid #ddd; padding: 8px 10px; }
+    legend { padding: 0 6px; font-weight: 600; }
+    label { display: inline-flex; align-items: center; gap: 6px; margin-right: 10px; white-space: nowrap; }
+    input:disabled { cursor: not-allowed; }
+    label:has(input:disabled) { opacity: 0.55; }
+    /* If the (auto) disabled checkbox is ON, make that state obvious */
+    label:has(input:disabled:checked) { opacity: 1; }
+    label:has(input:disabled:checked) input { accent-color: #000; }
+    label:has(input:disabled:checked) .sexsample { outline: 2px solid #000; outline-offset: 2px; border-radius: 3px; }
+    label:has(input:disabled:checked) .sexline { border-top-color: #000; }
+    label:has(input:disabled:checked) .sexmark { background: #000; }
+    #plot { width: 100%; height: 740px; }
+    #tooltip { position: absolute; z-index: 20; padding: 8px 10px; border: 1px solid #ddd; background: rgba(255,255,255,0.95); font-size: 12px; color: #111; display: none; max-width: none; width: max-content; pointer-events: none; }
+    #tooltip .row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; white-space: nowrap; }
+    #tooltip .left { white-space: nowrap; display: inline-flex; align-items: baseline; gap: 6px; }
+    #tooltip .sym { width: 1.1em; display: inline-block; text-align: center; }
+    #tooltip .age { font-variant-numeric: tabular-nums; }
+    .hint { color: #555; font-size: 12px; margin: 6px 0 0; }
+    .key { display: grid; grid-template-columns: 90px 1fr; column-gap: 12px; row-gap: 6px; align-items: center; }
+    .keyitems { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+    .swatch { display: inline-flex; align-items: center; gap: 8px; }
+    .chip { width: 14px; height: 14px; background: #000; display: inline-block; }
+    .sexsample { position: relative; width: 34px; height: 14px; display: inline-block; }
+    .sexline { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); border-top: 3px solid #111; }
+    .sexline--dash { border-top-style: dashed; }
+    .sexmark { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; background: #111; transform: translate(-50%, -50%); }
+    .sexmark--diamond { transform: translate(-50%, -50%) rotate(45deg); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="controls">
+      <fieldset>
+        <legend>Legend</legend>
+        <div class="key" style="margin-bottom: 8px">
+          <strong style="font-size: 12px; letter-spacing: 0.02em">Treatment</strong>
+          <span class="keyitems" id="treatment-boxes"></span>
+        </div>
+        <div class="key">
+          <strong style="font-size: 12px; letter-spacing: 0.02em">Sex</strong>
+          <span class="keyitems" id="sex-boxes"></span>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Uncertainty</legend>
+        <label><input type="checkbox" id="show-ribbons" /> Show 95% CI ribbons</label>
+      </fieldset>
+    </div>
+    <div style="position: relative">
+      <div id="plot"></div>
+      <div id="tooltip"></div>
+    </div>
+    <p class="hint">Tip: uncheck treatments/sexes to compare specific trajectories. Turn on ribbons only when you’ve reduced clutter.</p>
+  </div>
+  <script>
+    const payload = {"traces":[{"x":["SEMI","PEAK","FULL","FULL","PEAK","SEMI"],"y":[78.770277832093,94.460872662296,106.97709767911,116.905650526013,102.570934750393,89.28869528906],"type":"scatter","mode":"lines","fill":"toself","fillcolor":"#56B4E922","line":{"color":"rgba(0,0,0,0)"},"hoverinfo":"skip","name":"DC — F 95% CI","meta":{"treatment":"DC","sex":"F","kind":"ribbon"}},{"x":["SEMI","PEAK","FULL"],"y":[83.80777633947,98.326552297383,111.672780680925],"type":"scatter","mode":"lines+markers","line":{"color":"#56B4E9","width":3,"dash":"solid"},"marker":{"color":"#56B4E9","size":8,"symbol":"circle"},"name":"DC — F","hoverinfo":"none","hovertemplate":"","meta":{"treatment":"DC","sex":"F","kind":"line"}},{"x":["SEMI","PEAK","FULL","FULL","PEAK","SEMI"],"y":[77.305049784028,100.42573132425,120.536335278553,132.059055092963,109.466029281592,88.431152399315],"type":"scatter","mode":"lines","fill":"toself","fillcolor":"#E69F0022","line":{"color":"rgba(0,0,0,0)"},"hoverinfo":"skip","name":"SC — F 95% CI","meta":{"treatment":"SC","sex":"F","kind":"ribbon"}},{"x":["SEMI","PEAK","FULL"],"y":[82.736713027665,104.834549265983,126.162907907144],"type":"scatter","mode":"lines+markers","line":{"color":"#E69F00","width":3,"dash":"solid"},"marker":{"color":"#E69F00","size":8,"symbol":"circle"},"name":"SC — F","hoverinfo":"none","hovertemplate":"","meta":{"treatment":"SC","sex":"F","kind":"line"}},{"x":["SEMI","PEAK","FULL","FULL","PEAK","SEMI"],"y":[70.944740245917,101.454365091321,117.602512019779,130.479269524058,112.07589407886,82.469540683108],"type":"scatter","mode":"lines","fill":"toself","fillcolor":"#009E7322","line":{"color":"rgba(0,0,0,0)"},"hoverinfo":"skip","name":"DT — F 95% CI","meta":{"treatment":"DT","sex":"F","kind":"ribbon"}},{"x":["SEMI","PEAK","FULL"],"y":[76.529664367476,106.581409555615,123.900641109599],"type":"scatter","mode":"lines+markers","line":{"color":"#009E73","width":3,"dash":"solid"},"marker":{"color":"#009E73","size":8,"symbol":"circle"},"name":"DT — F","hoverinfo":"none","hovertemplate":"","meta":{"treatment":"DT","sex":"F","kind":"line"}},{"x":["SEMI","PEAK","FULL","FULL","PEAK","SEMI"],"y":[80.260383834302,94.072460511018,103.876880947479,114.700297796208,102.845899106021,92.339323078781],"type":"scatter","mode":"lines","fill":"toself","fillcolor":"#56B4E922","line":{"color":"rgba(0,0,0,0)"},"hoverinfo":"skip","name":"DC — M 95% CI","meta":{"treatment":"DC","sex":"M","kind":"ribbon"}},{"x":["SEMI","PEAK","FULL"],"y":[86.067428282668,98.402079859095,109.065398702371],"type":"scatter","mode":"lines+markers","line":{"color":"#56B4E9","width":3,"dash":"dash"},"marker":{"color":"#56B4E9","size":8,"symbol":"diamond"},"name":"DC — M","hoverinfo":"none","hovertemplate":"","meta":{"treatment":"DC","sex":"M","kind":"line"}},{"x":["SEMI","PEAK","FULL","FULL","PEAK","SEMI"],"y":[85.596037598333,108.531329713287,130.72118045396,143.371441835796,118.340068484883,97.786270990661],"type":"scatter","mode":"lines","fill":"toself","fillcolor":"#E69F0022","line":{"color":"rgba(0,0,0,0)"},"hoverinfo":"skip","name":"SC — M 95% CI","meta":{"treatment":"SC","sex":"M","kind":"ribbon"}},{"x":["SEMI","PEAK","FULL"],"y":[91.611670094577,113.435127563605,136.903380353287],"type":"scatter","mode":"lines+markers","line":{"color":"#E69F00","width":3,"dash":"dash"},"marker":{"color":"#E69F00","size":8,"symbol":"diamond"},"name":"SC — M","hoverinfo":"none","hovertemplate":"","meta":{"treatment":"SC","sex":"M","kind":"line"}},{"x":["SEMI","PEAK","FULL","FULL","PEAK","SEMI"],"y":[68.427489204388,118.963654905462,128.876352581913,144.207793037278,132.024924944972,80.240980141914],"type":"scatter","mode":"lines","fill":"toself","fillcolor":"#009E7322","line":{"color":"rgba(0,0,0,0)"},"hoverinfo":"skip","name":"DT — M 95% CI","meta":{"treatment":"DT","sex":"M","kind":"ribbon"}},{"x":["SEMI","PEAK","FULL"],"y":[74.166868721493,125.278084015282,136.453901833891],"type":"scatter","mode":"lines+markers","line":{"color":"#009E73","width":3,"dash":"dash"},"marker":{"color":"#009E73","size":8,"symbol":"diamond"},"name":"DT — M","hoverinfo":"none","hovertemplate":"","meta":{"treatment":"DT","sex":"M","kind":"line"}},{"x":["SEMI","PEAK","FULL","FULL","PEAK","SEMI"],"y":[81.096824802195,95.519017799184,106.915118511058,114.174906605417,101.428890327068,88.950272773998],"type":"scatter","mode":"lines","fill":"toself","fillcolor":"#56B4E922","line":{"color":"rgba(0,0,0,0)"},"hoverinfo":"skip","name":"DC — ALL 95% CI","meta":{"treatment":"DC","sex":"ALL","kind":"ribbon"}},{"x":["SEMI","PEAK","FULL"],"y":[84.962416013337,98.360627692568,110.406806139956],"type":"scatter","mode":"lines+markers","line":{"color":"#56B4E9","width":3,"dash":"solid"},"marker":{"color":"#56B4E9","size":8,"symbol":"square"},"name":"DC — ALL","hoverinfo":"none","hovertemplate":"","meta":{"treatment":"DC","sex":"ALL","kind":"line"}},{"x":["SEMI","PEAK","FULL","FULL","PEAK","SEMI"],"y":[83.255356217825,105.751203591454,127.301620659677,135.924176549851,112.562978394766,91.469730204586],"type":"scatter","mode":"lines","fill":"toself","fillcolor":"#E69F0022","line":{"color":"rgba(0,0,0,0)"},"hoverinfo":"skip","name":"SC — ALL 95% CI","meta":{"treatment":"SC","sex":"ALL","kind":"ribbon"}},{"x":["SEMI","PEAK","FULL"],"y":[87.175612750809,109.157808190945,131.543400781685],"type":"scatter","mode":"lines+markers","line":{"color":"#E69F00","width":3,"dash":"solid"},"marker":{"color":"#E69F00","size":8,"symbol":"square"},"name":"SC — ALL","hoverinfo":"none","hovertemplate":"","meta":{"treatment":"SC","sex":"ALL","kind":"line"}},{"x":["SEMI","PEAK","FULL","FULL","PEAK","SEMI"],"y":[71.287706272502,111.813410932563,125.258355814597,135.299684837127,120.263650174592,79.515050122962],"type":"scatter","mode":"lines","fill":"toself","fillcolor":"#009E7322","line":{"color":"rgba(0,0,0,0)"},"hoverinfo":"skip","name":"DT — ALL 95% CI","meta":{"treatment":"DT","sex":"ALL","kind":"ribbon"}},{"x":["SEMI","PEAK","FULL"],"y":[75.395185500616,115.946692877801,130.210205360153],"type":"scatter","mode":"lines+markers","line":{"color":"#009E73","width":3,"dash":"solid"},"marker":{"color":"#009E73","size":8,"symbol":"square"},"name":"DT — ALL","hoverinfo":"none","hovertemplate":"","meta":{"treatment":"DT","sex":"ALL","kind":"line"}}],"layout":{"autosize":true,"margin":{"l":60,"r":25,"t":45,"b":60},"showlegend":false,"height":740,"yaxis":{"title":"Milestone age (days)","range":[68,145],"autorange":false,"dtick":5,"showgrid":true,"ticks":"outside","ticklen":6,"minor":{"dtick":1,"ticks":"outside","ticklen":3,"showgrid":false}},"xaxis":{"title":"Milestone (ontogeny)","type":"category","categoryorder":"array","categoryarray":["SEMI","PEAK","FULL"]},"hovermode":"x","hoverdistance":15,"uirevision":"lock-axes"},"palette":{"DC":"#56B4E9","SC":"#E69F00","DT":"#009E73"},"sex_levels":["F","M"],"treat_levels":["DC","SC","DT"],"milestone_order":["SEMI","PEAK","FULL"]};
+    const gd = document.getElementById('plot');
+    const treatments = payload.treat_levels;
+    const sexes = payload.sex_levels;
+    const milestoneOrder = payload.milestone_order;
+    const palette = payload.palette || {};
+    const tooltip = document.getElementById('tooltip');
+
+    const layout = payload.layout;
+
+    // Build checkboxes dynamically (generic; no hardcoded DC/SC/DT etc.)
+    function safeId(v) {
+      return String(v).replace(/[^a-zA-Z0-9_-]/g, '_');
+    }
+    function addCheckboxRow(container, id, value, labelHtml, checked, disabled=false) {
+      const lab = document.createElement('label');
+      lab.className = 'swatch';
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.id = id;
+      input.value = value;
+      input.checked = checked;
+      input.disabled = !!disabled;
+      lab.appendChild(input);
+      const span = document.createElement('span');
+      span.innerHTML = labelHtml;
+      lab.appendChild(span);
+      container.appendChild(lab);
+    }
+
+    const trBox = document.getElementById('treatment-boxes');
+    treatments.forEach(tr => {
+      const col = palette[tr] || '#111';
+      addCheckboxRow(trBox, `tr-${safeId(tr)}`, tr, `<span class=\"chip\" style=\"background:${col}\"></span> ${tr}`, true);
+    });
+
+    const sxBox = document.getElementById('sex-boxes');
+    function sexSample(label) {
+      if (label === 'M') return `<span class=\"sexsample\"><span class=\"sexline sexline--dash\"></span><span class=\"sexmark sexmark--diamond\"></span></span> M`;
+      if (label === 'F') return `<span class=\"sexsample\"><span class=\"sexline\"></span><span class=\"sexmark\" style=\"border-radius:50%\"></span></span> F`;
+      return `<span class=\"sexsample\"><span class=\"sexline\"></span><span class=\"sexmark\"></span></span> Averaged`;
+    }
+    sexes.forEach(sx => {
+      addCheckboxRow(sxBox, `sx-${safeId(sx)}`, sx, sexSample(sx), true, false);
+    });
+    // Averaged is auto-managed (indicator), not user-clickable.
+    addCheckboxRow(sxBox, 'sx-ALL', 'ALL', sexSample('ALL'), false, true);
+
+    // Compute and lock y-range from all trace y-values (keeps axes stable when toggling ribbons)
+    function computeYRange() {
+      let lo = Infinity, hi = -Infinity;
+      for (const t of payload.traces) {
+        if (!t || !Array.isArray(t.y)) continue;
+        for (const v of t.y) {
+          const n = Number(v);
+          if (!Number.isFinite(n)) continue;
+          lo = Math.min(lo, n);
+          hi = Math.max(hi, n);
+        }
+      }
+      if (!Number.isFinite(lo) || !Number.isFinite(hi)) return null;
+      lo = Math.floor(lo);
+      hi = Math.ceil(hi);
+      return [lo, hi];
+    }
+    const yRange = computeYRange();
+    if (yRange) {
+      layout.yaxis = Object.assign({}, layout.yaxis || {}, {
+        range: yRange,
+        autorange: false,
+        dtick: 5,
+        showgrid: true,
+        ticks: 'outside',
+        ticklen: 6,
+        minor: { dtick: 1, ticks: 'outside', ticklen: 3, showgrid: false }
+      });
+    }
+    // Add a bit of categorical padding left/right of first/last milestone.
+    if (Array.isArray(milestoneOrder) && milestoneOrder.length) {
+      const n = milestoneOrder.length;
+      // For category axes, Plotly uses category indices for range.
+      layout.xaxis = Object.assign({}, layout.xaxis || {}, { range: [-0.4, (n - 1) + 0.4] });
+    }
+
+    const baseTraces = payload.traces;
+    const baseLayout = layout;
+
+    function getSelected(prefix, values) {
+      const selected = new Set();
+      values.forEach(v => {
+        const cb = document.getElementById(`${prefix}-${safeId(v)}`);
+        if (cb && cb.checked) selected.add(v);
+      });
+      return selected;
+    }
+
+    function syncSexSelection() {
+      const cbA = document.getElementById('sx-ALL');
+      if (!cbA) return;
+      cbA.disabled = true;
+      const anySexChecked = sexes.some(sx => {
+        const cb = document.getElementById(`sx-${safeId(sx)}`);
+        return cb && cb.checked;
+      });
+
+      // If user selects any sex, disable Averaged.
+      if (anySexChecked) {
+        cbA.checked = false;
+        return;
+      }
+
+      // If none are selected, automatically switch to Averaged.
+      cbA.checked = true;
+    }
+
+    function getActiveSexes() {
+      // Returns Set of allowed meta.sex values based on UI.
+      const cbA = document.getElementById('sx-ALL');
+      if (cbA && cbA.checked) return new Set(['ALL']);
+      const sel = getSelected('sx', sexes);
+      // If empty, syncSexSelection should have turned on Averaged, but fallback anyway.
+      return sel.size ? sel : new Set(['ALL']);
+    }
+
+    function buildTraces({showRibbons, selTr, selSx}) {
+      const ribbons = [];
+      const lines = [];
+      const useAllSex = selSx.has('ALL');
+      for (const t of baseTraces) {
+        const meta = t.meta || {};
+        const ok = selTr.has(meta.treatment) && (useAllSex ? (meta.sex === 'ALL') : selSx.has(meta.sex));
+        if (!ok) continue;
+        if ((meta.kind || '') === 'ribbon') {
+          // keep ribbons off unless explicitly enabled
+          if (!showRibbons) {
+            // hide ribbon entirely in this mode
+            continue;
+          }
+          ribbons.push(t);
+          continue;
+        }
+        lines.push(t);
+      }
+      // Ensure uncertainty ribbons are always behind lines.
+      return ribbons.concat(lines);
+    }
+
+    function render() {
+      const selTr = getSelected('tr', treatments);
+      syncSexSelection();
+      const selSx = getActiveSexes();
+      const showRibbons = document.getElementById('show-ribbons').checked;
+      const traces = buildTraces({showRibbons, selTr, selSx});
+      Plotly.react(gd, traces, baseLayout, {responsive: true, displayModeBar: false});
+    }
+
+    Plotly.newPlot(gd, buildTraces({showRibbons:false, selTr:new Set(treatments), selSx:new Set(sexes)}), baseLayout, {responsive: true, displayModeBar: false});
+
+    document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+      cb.addEventListener('change', render);
+    });
+    render();
+
+    function traceColor(t) {
+      return (((t||{}).line||{}).color) || (((t||{}).marker||{}).color) || '#111';
+    }
+
+    function fmtRow(color, tr, sx, age) {
+      const sexSymbol = (sx === 'ALL') ? '■' : ((sx === 'M') ? '◆' : '●');
+      const sym = `<span class=\"sym\" style=\"color:${color}; font-weight: 900\">${sexSymbol}</span>`;
+      const label = `<span>${tr} · ${sx}</span>`;
+      const ageInt = Math.round(age);
+      return `<div class=\"row\"><span class=\"left\">${sym}${label}</span><span class=\"age\">${ageInt} d</span></div>`;
+    }
+
+    // Continuous crosshair line following the cursor's y position.
+    let rafPending = false;
+    let lastMouseEvent = null;
+    function setCrosshair(yVal) {
+      if (!Number.isFinite(yVal)) return;
+      Plotly.relayout(gd, {
+        shapes: [{
+          type: 'line',
+          xref: 'paper', x0: 0, x1: 1,
+          yref: 'y', y0: yVal, y1: yVal,
+          line: { color: 'rgba(120,120,120,0.25)', width: 1 }
+        }]
+      });
+    }
+
+    function clearCrosshair() {
+      Plotly.relayout(gd, { shapes: [] });
+    }
+
+    function onMouseMove(e) {
+      lastMouseEvent = e;
+      if (rafPending) return;
+      rafPending = true;
+      window.requestAnimationFrame(() => {
+        rafPending = false;
+        if (!lastMouseEvent) return;
+        const full = gd._fullLayout;
+        if (!full || !full.yaxis || !full._size) return;
+        const rect = gd.getBoundingClientRect();
+        const yClient = lastMouseEvent.clientY - rect.top;
+        const plotY = yClient - full._size.t;
+        if (plotY < 0 || plotY > full._size.h) return;
+        const yVal = full.yaxis.p2l(plotY);
+        setCrosshair(yVal);
+      });
+    }
+
+    gd.addEventListener('mousemove', onMouseMove);
+    gd.addEventListener('mouseleave', () => { clearCrosshair(); });
+
+    gd.on('plotly_hover', (ev) => {
+      const selTr = getSelected('tr', treatments);
+      syncSexSelection();
+      const selSx = getActiveSexes();
+      const useAllSex = selSx.has('ALL');
+      const pts = (ev && ev.points) ? ev.points : [];
+      const e = ev && ev.event ? ev.event : null;
+      const rows = [];
+      let yHover = null;
+      for (const p of pts) {
+        const t = p.data;
+        const meta = (t && t.meta) ? t.meta : {};
+        if ((meta.kind || '') !== 'line') continue;
+        if (!selTr.has(meta.treatment) || !(useAllSex ? (meta.sex === 'ALL') : selSx.has(meta.sex))) continue;
+        if (t && (t.visible === false || t.visible === 'legendonly')) continue;
+        const age = Number(p.y);
+        if (!Number.isFinite(age)) continue;
+        if (yHover === null) yHover = age;
+        rows.push({ age, html: fmtRow(traceColor(t), meta.treatment, meta.sex, age) });
+      }
+      rows.sort((a,b) => b.age - a.age);
+      if (!rows.length) { tooltip.style.display = 'none'; return; }
+      tooltip.innerHTML = rows.map(r => r.html).join('');
+      if (e) {
+        const rect = gd.getBoundingClientRect();
+        const x = e.clientX - rect.left + 14;
+        const y = e.clientY - rect.top + 14;
+        tooltip.style.left = Math.max(8, Math.min(x, rect.width - 20)) + 'px';
+        tooltip.style.top = Math.max(8, Math.min(y, rect.height - 20)) + 'px';
+      } else {
+        tooltip.style.left = '12px';
+        tooltip.style.top = '12px';
+      }
+      tooltip.style.display = 'block';
+    });
+    gd.on('plotly_unhover', () => {
+      tooltip.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
+

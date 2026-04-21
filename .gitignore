@@ -4,3 +4,6 @@
 # Local model fits (large, frequently changing)
 models/*.rds
 
+# Accidental nested output folder (Windows/Drive can lock it)
+figures/figures/
+

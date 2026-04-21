@@ -123,6 +123,34 @@
         color: var(--muted);
         font-size: 0.9rem;
       }
+
+      .embed-frame {
+        width: 100%;
+      }
+
+      .embed-frame iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+      }
+
+      /* Breakout layout for wide figures (wider than text column) */
+      .wide-bleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        padding-left: clamp(0.75rem, 3vw, 2rem);
+        padding-right: clamp(0.75rem, 3vw, 2rem);
+      }
+
+      .wide-bleed .interactive__bar,
+      .wide-bleed .interactive__note,
+      .wide-bleed .embed-frame {
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
     </style>
   </head>
   <body>
@@ -250,6 +278,32 @@
       <figure>
         <img src="figures/fig03-seasonal-timeline.png" alt="Figure 3 — Seasonal timeline" />
         <figcaption>Figure 3. Placeholder caption. Replace with a timeline: births, expulsions, rainfall, predator events, group splits/merges.</figcaption>
+      </figure>
+
+      <p><strong>Developmental milestones (ontogeny)</strong><br />SEMI → PEAK → FULL milestone ages shown together, by maternal treatment and sex.</p>
+      <figure>
+        <img src="figures/Milestones_Combined.png" alt="Combined milestone ages across SEMI, PEAK DIG, and FULL, by treatment and sex" />
+        <figcaption>Combined view. SEMI → PEAK DIG → FULL milestone ages in one plot, by maternal treatment and sex.</figcaption>
+      </figure>
+      <figure class="interactive wide-bleed">
+        <div class="interactive__bar">
+          <p class="interactive__title">Interactive (test) — Milestones trajectory</p>
+          <div class="interactive__controls">
+            <span>Filter treatment/sex to compare trajectories</span>
+          </div>
+        </div>
+        <div class="embed-frame" style="height: 980px">
+          <iframe
+            title="Milestones trajectory (interactive)"
+            src="figures/Milestones_Combined.html"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+          ></iframe>
+        </div>
+        <p class="interactive__note">
+          If this is blank, generate it by running <code>scripts/milestones_interactive.R</code>
+          (writes <code>figures/Milestones_Combined.html</code> and <code>figures/Milestones_Combined_files/</code>).
+        </p>
       </figure>
 
       <hr />

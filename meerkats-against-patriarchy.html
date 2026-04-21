@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Meerkats Against Patriarchy</title>
+    <style>
+      :root {
+        --ink: #111;
+        --muted: #555;
+        --rule: #ddd;
+        --bg: #fff;
+        --max: 72ch;
+      }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        line-height: 1.6;
+        color: var(--ink);
+        background: var(--bg);
+      }
+      main {
+        max-width: var(--max);
+        padding: clamp(1.25rem, 4vw, 2.5rem);
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0 0 0.75rem;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+      .meta {
+        margin: 0 0 1.5rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      hr {
+        border: 0;
+        border-top: 1px solid var(--rule);
+        margin: 2rem 0;
+      }
+      h2 {
+        margin: 2rem 0 0.75rem;
+        padding-top: 0.25rem;
+        border-top: 1px solid var(--rule);
+        font-size: 1.05rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      p {
+        margin: 0 0 1rem;
+      }
+      ul {
+        margin: 0 0 1rem 1.1rem;
+        padding: 0;
+      }
+      blockquote {
+        margin: 1rem 0;
+        padding: 0.75rem 1rem;
+        border-left: 4px solid var(--rule);
+        color: var(--muted);
+        background: #fafafa;
+      }
+      figure {
+        margin: 1.75rem 0;
+      }
+      figure img {
+        width: 100%;
+        height: auto;
+        display: block;
+        background: #f5f5f5;
+      }
+      figcaption {
+        margin-top: 0.6rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+        font-style: italic;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+          "Courier New", monospace;
+        font-size: 0.95em;
+      }
+
+      .interactive {
+        border: 1px solid var(--rule);
+        padding: 0.9rem;
+        background: #fff;
+      }
+      .interactive__bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem 1rem;
+        margin-bottom: 0.75rem;
+      }
+      .interactive__title {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .interactive__controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .interactive__controls label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .interactive__controls select {
+        font: inherit;
+        padding: 0.2rem 0.35rem;
+      }
+      .interactive__note {
+        margin: 0.25rem 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Meerkats Against Patriarchy</h1>
+        <p class="meta">
+          <strong>Working title</strong>: <em>Meerkats Against Patriarchy</em> ·
+          <strong>Format</strong>: longform data-journalism project text ·
+          <strong>Last updated</strong>: 2026-04-21
+        </p>
+      </header>
+
+      <h2>Lede</h2>
+      <p>
+        Patriarchy is often presented as “natural”: a default social order that emerges wherever groups
+        form, compete, and reproduce. But nature is not a single story. In the Kalahari, meerkats
+        (<em>Suricata suricatta</em>) live in tightly coordinated groups whose daily survival depends on care
+        work, negotiation, and constant attention to risk. Their social world is not a moral blueprint for
+        humans—yet it is a powerful antidote to the idea that hierarchy must look one way.
+      </p>
+      <p>
+        This project uses a data-journalism lens to ask a simple question:
+        <strong
+          >what happens to our assumptions about power when we look closely at a species whose social
+          life is built on cooperation, distributed vigilance, and reproductive conflict that does not map
+          neatly onto “male rule”?</strong
+        >
+      </p>
+
+      <blockquote>
+        <strong>Note for portfolio use</strong>: Replace bracketed placeholders like
+        <code>[YOUR THESIS CLAIM]</code> and <code>[DATASET NAME]</code> with your thesis-specific wording and sources.
+      </blockquote>
+
+      <hr />
+
+      <h2>What this story is (and isn’t)</h2>
+      <p>
+        This is not a “meerkats prove feminism” gimmick, and it’s not a nature documentary script. It’s an
+        argument about <strong>how we narrate social order</strong>.
+      </p>
+      <ul>
+        <li>We tend to treat “patriarchy” as a biological constant.</li>
+        <li>We borrow metaphors from animals to justify human inequity.</li>
+        <li>We ignore the fact that many animal societies organize power and care in ways that complicate the popular myth of the dominant male.</li>
+      </ul>
+      <p>
+        The goal is analytical: <strong>to separate observation from ideology</strong> and show—using figures,
+        timelines, and a transparent methodology—where common claims about “natural hierarchy” collapse
+        under scrutiny.
+      </p>
+
+      <hr />
+
+      <h2>Research question</h2>
+      <p><strong>Main question</strong>: [YOUR THESIS RESEARCH QUESTION]</p>
+      <p><strong>Working sub-questions</strong></p>
+      <ul>
+        <li><strong>Division of labor</strong>: Who performs which tasks (sentinel duty, pup care, foraging leadership), and how does that change with context?</li>
+        <li><strong>Risk and responsibility</strong>: How are danger and care distributed across individuals?</li>
+        <li><strong>Reproduction and control</strong>: How does reproductive monopolization (if present) shape group stability?</li>
+        <li><strong>Narrative bias</strong>: Where do popular summaries overstate “dominance” and understate cooperation?</li>
+      </ul>
+
+      <hr />
+
+      <h2>Data and sources</h2>
+      <ul>
+        <li><strong>Primary dataset</strong>: [DATASET NAME / FIELDWORK LOG / ETHOGRAM]</li>
+        <li><strong>Literature base</strong>: [KEY PAPERS / BOOKS / AUTHORS]</li>
+        <li><strong>Secondary observations</strong>: [DOCUMENTARY EPISODES / OPEN DATA / LAB NOTES]</li>
+      </ul>
+      <p><strong>Variables (example schema)</strong></p>
+      <ul>
+        <li>timestamp</li>
+        <li>individual_id</li>
+        <li>sex (if known)</li>
+        <li>age_class</li>
+        <li>role (sentinel / babysitting / foraging / grooming / aggression / alarm call)</li>
+        <li>interaction_target</li>
+        <li>context (predator presence / pup season / drought / territory conflict)</li>
+      </ul>
+
+      <hr />
+
+      <h2>Methods (transparent and readable)</h2>
+      <p><strong>1) From observation to events</strong><br />We transform field notes into “events”, then aggregate them by day/week/season to compare patterns.</p>
+      <p>
+        <strong>2) Measuring power without moralizing it</strong><br />“Power” is operationalized as measurable control over access, movement, reproduction, and sanctions.
+      </p>
+      <p>
+        <strong>3) Measuring care work as a system</strong><br />Care work is operationalized as measurable investment in pup care, vigilance, and conflict dampening.
+      </p>
+
+      <hr />
+
+      <h2>Findings</h2>
+      <p><strong>Finding 1: Cooperation is infrastructure</strong><br />If your thesis supports it, show that vigilance and care work are survival-critical labor that scales with risk.</p>
+      <figure class="interactive" id="b-prop-widget">
+        <div class="interactive__bar">
+          <p class="interactive__title">Interactive figure — Call proportions over age (REP, DIG, CC)</p>
+          <div class="interactive__controls">
+            <span>Model-based predictions from `CallProportions` (brms)</span>
+          </div>
+        </div>
+        <img src="figures/CallProportions.png" alt="Predicted call-type proportions (REP, DIG, CC) over age, by treatment and sex" />
+        <p class="interactive__note">
+          If this is blank, generate it by running <code>scripts/b_prop_interactive.R</code>
+          (writes <code>figures/CallProportions.png</code>).
+        </p>
+      </figure>
+      <figure>
+        <img src="figures/fig01-activity-budget.png" alt="Figure 1 — Daily activity budget" />
+        <figcaption>Figure 1. Placeholder caption. Replace with your chart: e.g., “Share of observed minutes by role across a typical day, split by predator presence.”</figcaption>
+      </figure>
+
+      <p><strong>Finding 2: Dominance is situational</strong><br />Influence can be context-dependent; who leads, who signals, who punishes, who nourishes can differ across situations.</p>
+      <figure>
+        <img src="figures/fig02-interaction-network.png" alt="Figure 2 — Interaction network" />
+        <figcaption>Figure 2. Placeholder caption. Replace with your network plot: nodes = individuals; edges = grooming/support/aggression; color = role or sex; thickness = frequency.</figcaption>
+      </figure>
+
+      <p><strong>Finding 3: Reproduction is conflict, managed socially</strong><br />The story is the social technology that manages conflict: alliances, expulsions, reconciliation, rebalancing cohesion.</p>
+      <figure>
+        <img src="figures/fig03-seasonal-timeline.png" alt="Figure 3 — Seasonal timeline" />
+        <figcaption>Figure 3. Placeholder caption. Replace with a timeline: births, expulsions, rainfall, predator events, group splits/merges.</figcaption>
+      </figure>
+
+      <hr />
+
+      <h2>Field moments (photos)</h2>
+      <figure>
+        <img src="pics/photo01-sentinel.jpg" alt="Photo 1 — Sentinel posture" />
+        <figcaption>Photo 1. Placeholder caption. Where/when was this taken? What behavior does it illustrate?</figcaption>
+      </figure>
+      <figure>
+        <img src="pics/photo02-pup-care.jpg" alt="Photo 2 — Pup care" />
+        <figcaption>Photo 2. Placeholder caption. What care behavior is visible, and why does it matter for the argument?</figcaption>
+      </figure>
+
+      <hr />
+
+      <h2>Interpretation: what “against patriarchy” means here</h2>
+      <ul>
+        <li><strong>“Patriarchy” is not a synonym for “biology.”</strong></li>
+        <li>When people use animal stories to naturalize human domination, they cherry-pick.</li>
+        <li>A close, data-grounded look shows multiple viable ways to distribute risk, care, and control.</li>
+      </ul>
+      <p><strong>Thesis claim</strong>: [YOUR THESIS CLAIM IN ONE SENTENCE]</p>
+
+      <hr />
+
+      <h2>Limitations and ethics</h2>
+      <ul>
+        <li><strong>Translation risk</strong>: Animal behavior does not map cleanly onto human categories (gender, consent, family).</li>
+        <li><strong>Observation bias</strong>: Visibility differs by individual and environment; some behaviors are undercounted.</li>
+        <li><strong>Data gaps</strong>: [MISSING DATA TYPES] can affect conclusions.</li>
+        <li><strong>Interpretive humility</strong>: This project critiques human narratives more than it “explains” meerkats.</li>
+      </ul>
+
+      <hr />
+
+      <h2>Credits</h2>
+      <ul>
+        <li><strong>Text &amp; analysis</strong>: [YOUR NAME]</li>
+        <li><strong>Data</strong>: [DATA SOURCES]</li>
+        <li><strong>Code/tools</strong>: [R / Python / Flourish / RAWGraphs / D3 / etc.]</li>
+        <li><strong>Photos</strong>: [YOUR NAME / LICENSE]</li>
+      </ul>
+    </main>
+  </body>
+</html>
+

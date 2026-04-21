@@ -1,0 +1,6 @@
+*.Rhistory
+*.RData
+
+# Local model fits (large, frequently changing)
+models/*.rds
+

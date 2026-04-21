@@ -50,3 +50,21 @@ Rscript scripts/b_prop_interactive.R
 This will write:
 - `figures/CallProportions.png`
 
+## Generate milestone-age figures (SEMI / PEAK DIG / FULL)
+If you have the three milestone models available locally:
+- `models/SEMI_anova.rds`
+- `models/DIG_PEAK_anova.rds`
+- `models/FULL_anova.rds`
+
+You can generate milestone figures (by treatment × sex) with:
+
+```powershell
+Rscript scripts/milestones_figures.R
+```
+
+Outputs:
+- `figures/Milestone_SEMI.png`
+- `figures/Milestone_DIG_PEAK.png`
+- `figures/Milestone_FULL.png`
+- `figures/Milestones_Combined.png`
+

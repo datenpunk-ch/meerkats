@@ -250,17 +250,24 @@
 
       <h2>Findings</h2>
       <p><strong>Finding 1: Cooperation is infrastructure</strong><br />If your thesis supports it, show that vigilance and care work are survival-critical labor that scales with risk.</p>
-      <figure class="interactive" id="b-prop-widget">
+      <figure class="interactive wide-bleed" id="b-prop-widget">
         <div class="interactive__bar">
           <p class="interactive__title">Interactive figure — Call proportions over age (REP, DIG, CC)</p>
           <div class="interactive__controls">
             <span>Model-based predictions from `CallProportions` (brms)</span>
           </div>
         </div>
-        <img src="figures/CallProportions.png" alt="Predicted call-type proportions (REP, DIG, CC) over age, by treatment and sex" />
+        <div class="embed-frame" style="height: 980px">
+          <iframe
+            title="Call proportions over age (interactive)"
+            src="figures/CallProportions.html"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+          ></iframe>
+        </div>
         <p class="interactive__note">
-          If this is blank, generate it by running <code>scripts/b_prop_interactive.R</code>
-          (writes <code>figures/CallProportions.png</code>).
+          If this is blank, generate it by running <code>scripts/call_proportions_interactive.R</code>
+          (writes <code>figures/CallProportions.html</code>).
         </p>
       </figure>
       <figure>
@@ -281,13 +288,9 @@
       </figure>
 
       <p><strong>Developmental milestones (ontogeny)</strong><br />SEMI → PEAK → FULL milestone ages shown together, by maternal treatment and sex.</p>
-      <figure>
-        <img src="figures/Milestones_Combined.png" alt="Combined milestone ages across SEMI, PEAK DIG, and FULL, by treatment and sex" />
-        <figcaption>Combined view. SEMI → PEAK DIG → FULL milestone ages in one plot, by maternal treatment and sex.</figcaption>
-      </figure>
       <figure class="interactive wide-bleed">
         <div class="interactive__bar">
-          <p class="interactive__title">Interactive (test) — Milestones trajectory</p>
+          <p class="interactive__title">Interactive Milestone trajectory</p>
           <div class="interactive__controls">
             <span>Filter treatment/sex to compare trajectories</span>
           </div>

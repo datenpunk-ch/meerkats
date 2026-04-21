@@ -176,8 +176,8 @@ make_traces <- function(summ, summ_allsex, sex_levels, treat_levels) {
         type = "scatter",
         mode = "lines",
         fill = "toself",
-        fillcolor = paste0(col, "22"), # light fill
-        line = list(color = "rgba(0,0,0,0)"),
+        fillcolor = paste0(col, "18"),
+        line = list(color = "rgba(0,0,0,0)", width = 0, shape = "linear"),
         hoverinfo = "skip",
         name = paste0(legend_name, " 95% CI"),
         meta = list(treatment = as.character(tr), sex = as.character(sx), kind = "ribbon")
@@ -189,7 +189,7 @@ make_traces <- function(summ, summ_allsex, sex_levels, treat_levels) {
         y = y0,
         type = "scatter",
         mode = "lines+markers",
-        line = list(color = col, width = 3, dash = sex_dash[[sx]]),
+        line = list(color = col, width = 3, dash = sex_dash[[sx]], shape = "linear"),
         marker = list(color = col, size = 8, symbol = sex_symbol[[sx]]),
         name = legend_name,
         # Disable Plotly's native hover box; we render our own tooltip.
@@ -221,8 +221,8 @@ make_traces <- function(summ, summ_allsex, sex_levels, treat_levels) {
       type = "scatter",
       mode = "lines",
       fill = "toself",
-      fillcolor = paste0(col, "22"),
-      line = list(color = "rgba(0,0,0,0)"),
+      fillcolor = paste0(col, "18"),
+      line = list(color = "rgba(0,0,0,0)", width = 0, shape = "linear"),
       hoverinfo = "skip",
       name = paste0(legend_name, " 95% CI"),
       meta = list(treatment = as.character(tr), sex = "ALL", kind = "ribbon")
@@ -233,7 +233,7 @@ make_traces <- function(summ, summ_allsex, sex_levels, treat_levels) {
       y = y0,
       type = "scatter",
       mode = "lines+markers",
-      line = list(color = col, width = 3, dash = sex_dash[["ALL"]]),
+      line = list(color = col, width = 3, dash = sex_dash[["ALL"]], shape = "linear"),
       marker = list(color = col, size = 8, symbol = sex_symbol[["ALL"]]),
       name = legend_name,
       hoverinfo = "none",
@@ -287,7 +287,7 @@ payload <- list(
   milestone_order = milestone_order
 )
 
-payload_json <- jsonlite::toJSON(payload, auto_unbox = TRUE, digits = 12)
+payload_json <- jsonlite::toJSON(payload, auto_unbox = TRUE, digits = 6)
 
 html <- paste0(
   "<!doctype html>\n",
@@ -434,7 +434,7 @@ html <- paste0(
   "        minor: { dtick: 1, ticks: 'outside', ticklen: 3, showgrid: false }\n",
   "      });\n",
   "    }\n",
-  "    // Add a bit of categorical padding left/right of first/last milestone.\n",
+  "    // Categorical x: small padding so SEMI / FULL are not flush with the plot edges (y-axis).\n",
   "    if (Array.isArray(milestoneOrder) && milestoneOrder.length) {\n",
   "      const n = milestoneOrder.length;\n",
   "      // For category axes, Plotly uses category indices for range.\n",

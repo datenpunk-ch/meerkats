@@ -303,17 +303,23 @@
       rows.sort((a,b) => b.age - a.age);
       if (!rows.length) { tooltip.style.display = 'none'; return; }
       tooltip.innerHTML = rows.map(r => r.html).join('');
+      // Make visible briefly so we can measure size for clamping.
+      tooltip.style.display = 'block';
+      const tipW = tooltip.offsetWidth || 0;
+      const tipH = tooltip.offsetHeight || 0;
       if (e) {
         const rect = gd.getBoundingClientRect();
-        const x = e.clientX - rect.left + 14;
-        const y = e.clientY - rect.top + 14;
-        tooltip.style.left = Math.max(8, Math.min(x, rect.width - 20)) + 'px';
-        tooltip.style.top = Math.max(8, Math.min(y, rect.height - 20)) + 'px';
+        const pad = 8;
+        let x = e.clientX - rect.left + 14;
+        let y = e.clientY - rect.top + 14;
+        x = Math.max(pad, Math.min(x, rect.width - pad - tipW));
+        y = Math.max(pad, Math.min(y, rect.height - pad - tipH));
+        tooltip.style.left = x + 'px';
+        tooltip.style.top = y + 'px';
       } else {
         tooltip.style.left = '12px';
         tooltip.style.top = '12px';
       }
-      tooltip.style.display = 'block';
     });
     gd.on('plotly_unhover', () => {
       tooltip.style.display = 'none';

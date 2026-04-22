@@ -4,63 +4,261 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Meerkats Against Patriarchy</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,700;1,400;1,700&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
-        --ink: #111;
-        --muted: #555;
-        --rule: #ddd;
-        --bg: #fff;
-        --max: 72ch;
+        --color-bg: #ffffff;
+        --color-bg-soft: #f7f8f9;
+        --color-ink: #0f0f0f;
+        --color-ink-body: #171717;
+        --color-muted: #5f5f5f;
+        --color-rule: #d9dde1;
+        --color-accent: #3a677a;
+        --color-accent-hover: #2f5a6b;
+
+        --font-display: "Spectral", "Georgia", serif;
+        --font-ui: "Karla", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+
+        --measure: 42rem;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
       }
       body {
         margin: 0;
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        line-height: 1.6;
-        color: var(--ink);
-        background: var(--bg);
+        font-family: var(--font-ui);
+        line-height: 1.75;
+        font-weight: 400;
+        color: var(--color-ink-body);
+        background: var(--color-bg);
+        overflow-x: hidden;
       }
-      main {
-        max-width: var(--max);
-        padding: clamp(1.25rem, 4vw, 2.5rem);
-        margin: 0 auto;
+
+      a {
+        color: var(--color-ink);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.18em;
       }
-      h1 {
-        margin: 0 0 0.75rem;
-        line-height: 1.1;
-        letter-spacing: -0.02em;
+      a:hover {
+        color: var(--color-accent-hover);
       }
-      .meta {
-        margin: 0 0 1.5rem;
-        color: var(--muted);
-        font-size: 0.95rem;
+      :focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
       }
-      hr {
-        border: 0;
-        border-top: 1px solid var(--rule);
-        margin: 2rem 0;
-      }
-      h2 {
-        margin: 2rem 0 0.75rem;
-        padding-top: 0.25rem;
-        border-top: 1px solid var(--rule);
-        font-size: 1.05rem;
+
+      .skip-link {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        padding: 8px 10px;
+        background: var(--color-bg);
+        border: 1px solid var(--color-rule);
+        color: var(--color-ink);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.04em;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        transform: translateY(-120%);
+        transition: transform 0.15s ease;
+        z-index: 200;
       }
-      p {
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        width: 0%;
+        background: var(--color-accent);
+        z-index: 100;
+        transition: width 0.1s;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 5vw;
+      }
+
+      .measure {
+        max-width: var(--measure);
+      }
+
+      .hero {
+        padding: 6rem 0 4rem;
+        background: var(--color-bg);
+      }
+      .hero-tag {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        color: var(--color-muted);
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+      .hero h1 {
+        font-family: var(--font-display);
+        font-size: clamp(2.8rem, 7vw, 6.25rem);
+        font-weight: 700;
+        line-height: 1.02;
+        color: var(--color-ink);
+        letter-spacing: -0.03em;
         margin: 0 0 1rem;
+        max-width: 18ch;
       }
+      .hero h1 em {
+        font-style: italic;
+        color: var(--color-ink);
+      }
+      .hero-sub {
+        font-size: 1.125rem;
+        color: var(--color-ink-body);
+        max-width: 62ch;
+        margin: 0 0 2rem;
+        line-height: 1.7;
+      }
+      .hero-byline {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--color-muted);
+        letter-spacing: 0.12em;
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        text-transform: uppercase;
+      }
+
+      section {
+        padding: 5.25rem 0;
+      }
+      section:nth-child(even) {
+        background: var(--color-bg-soft);
+      }
+
+      .section-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.22em;
+        color: var(--color-muted);
+        text-transform: uppercase;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .section-label::after {
+        content: "";
+        display: block;
+        height: 1px;
+        width: 40px;
+        background: var(--color-rule);
+      }
+
+      .sec-head {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--color-rule);
+        margin-bottom: 1.5rem;
+      }
+      .sec-num {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.22em;
+        color: var(--color-accent);
+        text-transform: uppercase;
+        flex: 0 0 auto;
+      }
+
+      h2 {
+        font-family: var(--font-display);
+        font-size: clamp(1.75rem, 3.2vw, 2.6rem);
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--color-ink);
+        margin: 0;
+      }
+      h2 em {
+        font-style: italic;
+        color: var(--color-ink);
+      }
+
+      h3 {
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--color-ink);
+        margin: 2rem 0 0.75rem;
+      }
+
+      p {
+        font-size: 1.0625rem;
+        color: var(--color-ink-body);
+        margin: 0 0 1.25rem;
+        max-width: 70ch;
+      }
+      p strong {
+        font-weight: 600;
+        color: var(--color-ink);
+      }
+
       ul {
-        margin: 0 0 1rem 1.1rem;
+        margin: 0 0 1.5rem 1.25rem;
         padding: 0;
+        max-width: 70ch;
+        color: var(--color-ink-body);
       }
-      blockquote {
-        margin: 1rem 0;
-        padding: 0.75rem 1rem;
-        border-left: 4px solid var(--rule);
-        color: var(--muted);
-        background: #fafafa;
+      li {
+        margin-bottom: 0.5rem;
       }
+
+      .pull-quote {
+        font-family: var(--font-display);
+        font-size: clamp(1.15rem, 2.2vw, 1.55rem);
+        font-style: italic;
+        line-height: 1.45;
+        color: var(--color-ink);
+        border-left: 2px solid var(--color-rule);
+        padding: 1rem 0 1rem 2rem;
+        margin: 2.5rem 0;
+        max-width: 70ch;
+      }
+
+      .note-box {
+        border-top: 1px solid var(--color-rule);
+        border-bottom: 1px solid var(--color-rule);
+        padding: 1rem 0;
+        margin: 2rem 0;
+        max-width: 70ch;
+      }
+      .note-box-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.22em;
+        color: var(--color-accent);
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+      }
+      .note-box p {
+        font-size: 0.98rem;
+        color: var(--color-muted);
+        margin: 0;
+        max-width: none;
+      }
+
       figure {
         margin: 1.75rem 0;
       }
@@ -68,71 +266,94 @@
         width: 100%;
         height: auto;
         display: block;
-        background: #f5f5f5;
+        background: var(--color-bg-soft);
       }
       figcaption {
         margin-top: 0.6rem;
-        color: var(--muted);
-        font-size: 0.95rem;
+        color: var(--color-muted);
+        font-size: 0.9rem;
         font-style: italic;
       }
       code {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-          "Courier New", monospace;
+        font-family: var(--font-mono);
         font-size: 0.95em;
       }
 
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 2.25rem 0;
+        opacity: 0.35;
+        max-width: 70ch;
+      }
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--color-rule);
+      }
+      .divider span {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.22em;
+        color: var(--color-muted);
+        text-transform: uppercase;
+      }
+
       .interactive {
-        border: 1px solid var(--rule);
-        padding: 0.9rem;
-        background: #fff;
+        border-top: 1px solid var(--color-rule);
+        border-bottom: 1px solid var(--color-rule);
+        padding: 1.25rem 0;
+        background: transparent;
       }
       .interactive__bar {
         display: flex;
         flex-wrap: wrap;
-        align-items: center;
+        align-items: baseline;
         justify-content: space-between;
         gap: 0.75rem 1rem;
         margin-bottom: 0.75rem;
       }
       .interactive__title {
         margin: 0;
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: var(--ink);
+        font-family: var(--font-display);
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        font-size: 1.05rem;
+        color: var(--color-ink);
       }
       .interactive__controls {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 0.5rem;
-        color: var(--muted);
-        font-size: 0.9rem;
-      }
-      .interactive__controls label {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-      }
-      .interactive__controls select {
-        font: inherit;
-        padding: 0.2rem 0.35rem;
+        color: var(--color-muted);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
       }
       .interactive__note {
-        margin: 0.25rem 0 0;
-        color: var(--muted);
+        margin: 0.6rem 0 0;
+        color: var(--color-muted);
         font-size: 0.9rem;
+        font-family: var(--font-mono);
+        letter-spacing: 0.03em;
       }
-
       .embed-frame {
         width: 100%;
+        overflow: hidden;
+        border: 1px solid var(--color-rule);
+        background: var(--color-bg);
       }
-
       .embed-frame iframe {
         width: 100%;
         height: 100%;
         border: 0;
         display: block;
+        background: transparent;
       }
 
       /* Breakout layout for wide figures (wider than text column) */
@@ -151,206 +372,512 @@
         margin-left: auto;
         margin-right: auto;
       }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* Sample-page components, restyled to portfolio guide */
+      .trio {
+        margin: 2rem 0;
+        border-top: 1px solid var(--color-rule);
+        border-bottom: 1px solid var(--color-rule);
+      }
+      .trio-card {
+        padding: 1.25rem 0;
+        border-bottom: 1px solid var(--color-rule);
+      }
+      .trio-card:last-child {
+        border-bottom: 0;
+      }
+      .trio-kicker {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--color-accent);
+        margin: 0 0 0.35rem;
+      }
+      .trio-card h4 {
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        margin: 0 0 0.35rem;
+        color: var(--color-ink);
+      }
+      .trio-card p {
+        margin: 0;
+        color: var(--color-muted);
+        font-size: 1rem;
+        max-width: 70ch;
+      }
+
+      .timeline {
+        margin: 2rem 0;
+        border-top: 1px solid var(--color-rule);
+      }
+      .tl-row {
+        display: grid;
+        grid-template-columns: 88px 1fr;
+        gap: 16px;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--color-rule);
+      }
+      .tl-age {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        color: var(--color-muted);
+        text-transform: uppercase;
+        text-align: right;
+        padding-top: 2px;
+      }
+      .tl-body h4 {
+        margin: 0 0 0.25rem;
+        font-family: var(--font-ui);
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-ink);
+      }
+      .tl-body p {
+        margin: 0;
+        color: var(--color-muted);
+        font-size: 1rem;
+        max-width: none;
+      }
+
+      .findings-grid {
+        margin: 2rem 0;
+        border-top: 1px solid var(--color-rule);
+      }
+      .finding-card {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 16px;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--color-rule);
+      }
+      .finding-num {
+        font-family: var(--font-display);
+        font-size: 2.25rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--color-ink);
+        line-height: 1;
+      }
+      .finding-meta {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--color-muted);
+        margin: 0.25rem 0 0.5rem;
+      }
+      .finding-desc {
+        margin: 0;
+        max-width: none;
+        color: var(--color-ink-body);
+        font-size: 1rem;
+      }
+
+      @media (max-width: 700px) {
+        .tl-row {
+          grid-template-columns: 1fr;
+        }
+        .tl-age {
+          text-align: left;
+        }
+        .finding-card {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      main section p,
+      main section ul,
+      main section .note-box,
+      main section .divider {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      @media (max-width: 600px) {
+        .hero-byline {
+          gap: 1rem;
+        }
+      }
     </style>
   </head>
   <body>
-    <main>
-      <header>
-        <h1>Meerkats Against Patriarchy</h1>
-        <p class="meta">
-          <strong>Working title</strong>: <em>Meerkats Against Patriarchy</em> ·
-          <strong>Format</strong>: longform data-journalism project text ·
-          <strong>Last updated</strong>: 2026-04-21
+    <a class="skip-link" href="#content">Skip to content</a>
+    <div class="progress-bar" id="progress"></div>
+
+    <header class="hero" aria-label="Hero">
+      <div class="container">
+        <div class="hero-tag">Data story · behavioural ecology · Kalahari Desert, South Africa</div>
+        <h1>Meerkats <em>Against</em> Patriarchy</h1>
+        <p class="hero-sub">
+          A longform, figure-driven narrative: how cooperation, conflict, and maternal hormones complicate
+          the myth that “power in nature” defaults to male rule.
         </p>
-      </header>
+        <div class="hero-byline">
+          <span>Britta Walkenhorst</span>
+          <span>University of Zurich</span>
+          <span>Last updated · 2026-04-21</span>
+        </div>
+      </div>
+    </header>
 
-      <h2>Lede</h2>
-      <p>
-        Patriarchy is often presented as “natural”: a default social order that emerges wherever groups
-        form, compete, and reproduce. But nature is not a single story. In the Kalahari, meerkats
-        (<em>Suricata suricatta</em>) live in tightly coordinated groups whose daily survival depends on care
-        work, negotiation, and constant attention to risk. Their social world is not a moral blueprint for
-        humans—yet it is a powerful antidote to the idea that hierarchy must look one way.
-      </p>
-      <p>
-        This project uses a data-journalism lens to ask a simple question:
-        <strong
-          >what happens to our assumptions about power when we look closely at a species whose social
-          life is built on cooperation, distributed vigilance, and reproductive conflict that does not map
-          neatly onto “male rule”?</strong
-        >
-      </p>
+    <main id="content">
+      <section>
+        <div class="container">
+          <div class="section-label reveal">Paper I — vocal ontogeny</div>
+          <div class="sec-head reveal">
+            <div class="sec-num">01</div>
+            <h2>The <em>cry</em> that shapes a life</h2>
+          </div>
+          <p class="reveal">
+            In the southern Kalahari, a meerkat pup’s survival is measured in calls per second. From the
+            moment it joins the foraging group at around 30 days old, it must compete — loudly, persistently,
+            strategically — for food from adult helpers. Beg too softly and you go hungry. Beg just right and
+            you gain the energy to grow, to learn, to survive.
+          </p>
+          <p class="reveal">
+            But what if the intensity of that begging isn’t just a matter of hunger or personality — what if
+            it’s already been written, weeks before birth, by your mother’s hormones?
+          </p>
 
-      <blockquote>
-        <strong>Note for portfolio use</strong>: Replace bracketed placeholders like
-        <code>[YOUR THESIS CLAIM]</code> and <code>[DATASET NAME]</code> with your thesis-specific wording and sources.
-      </blockquote>
+          <div class="pull-quote reveal">
+            “The pups weren’t just different animals. They were running different programs — and the code
+            had been set in the womb.”
+          </div>
 
-      <hr />
+          <p class="reveal">
+            That’s what this three-paper research programme set out to test: whether maternal androgens —
+            specifically testosterone — leave a lasting organisational imprint on how a meerkat pup develops
+            its voice, its competitiveness, and its independence.
+          </p>
 
-      <h2>What this story is (and isn’t)</h2>
-      <p>
-        This is not a “meerkats prove feminism” gimmick, and it’s not a nature documentary script. It’s an
-        argument about <strong>how we narrate social order</strong>.
-      </p>
-      <ul>
-        <li>We tend to treat “patriarchy” as a biological constant.</li>
-        <li>We borrow metaphors from animals to justify human inequity.</li>
-        <li>We ignore the fact that many animal societies organize power and care in ways that complicate the popular myth of the dominant male.</li>
-      </ul>
-      <p>
-        The goal is analytical: <strong>to separate observation from ideology</strong> and show—using figures,
-        timelines, and a transparent methodology—where common claims about “natural hierarchy” collapse
-        under scrutiny.
-      </p>
+          <div class="divider reveal"><span>the experiment</span></div>
 
-      <hr />
+          <div class="section-label reveal">Who the pups were</div>
+          <h3 class="reveal">Three mothers, three fates</h3>
 
-      <h2>Research question</h2>
-      <p><strong>Main question</strong>: [YOUR THESIS RESEARCH QUESTION]</p>
-      <p><strong>Working sub-questions</strong></p>
-      <ul>
-        <li><strong>Division of labor</strong>: Who performs which tasks (sentinel duty, pup care, foraging leadership), and how does that change with context?</li>
-        <li><strong>Risk and responsibility</strong>: How are danger and care distributed across individuals?</li>
-        <li><strong>Reproduction and control</strong>: How does reproductive monopolization (if present) shape group stability?</li>
-        <li><strong>Narrative bias</strong>: Where do popular summaries overstate “dominance” and understate cooperation?</li>
-      </ul>
+          <p class="reveal">
+            The study exploited a remarkable feature of meerkat biology: dominant females naturally have
+            testosterone levels that exceed even the males in their group — especially during late pregnancy.
+            Subordinate females have substantially lower levels. A third group was created by blocking androgen
+            receptors in dominant females during the last three weeks of their 70-day pregnancy.
+          </p>
 
-      <hr />
+          <div class="trio reveal" role="list">
+            <div class="trio-card" role="listitem">
+              <div class="trio-kicker">DC · dominant control</div>
+              <h4>High-testosterone mothers</h4>
+              <p>
+                Natural dominant females. Their testosterone surpasses males during late pregnancy. Offspring
+                exposed to the full androgen signal.
+              </p>
+            </div>
+            <div class="trio-card" role="listitem">
+              <div class="trio-kicker">SC · subordinate control</div>
+              <h4>Lower-testosterone mothers</h4>
+              <p>
+                Natural subordinate females. Still physiologically “masculinised” relative to most mammals, but
+                significantly lower than dominants.
+              </p>
+            </div>
+            <div class="trio-card" role="listitem">
+              <div class="trio-kicker">DT · dominant treated</div>
+              <h4>Androgen-blocked mothers</h4>
+              <p>
+                Dominant females given the androgen-receptor blocker flutamide during late gestation. High rank,
+                but offspring couldn’t receive the testosterone signal.
+              </p>
+            </div>
+          </div>
 
-      <h2>Data and sources</h2>
-      <ul>
-        <li><strong>Primary dataset</strong>: [DATASET NAME / FIELDWORK LOG / ETHOGRAM]</li>
-        <li><strong>Literature base</strong>: [KEY PAPERS / BOOKS / AUTHORS]</li>
-        <li><strong>Secondary observations</strong>: [DOCUMENTARY EPISODES / OPEN DATA / LAB NOTES]</li>
-      </ul>
-      <p><strong>Variables (example schema)</strong></p>
-      <ul>
-        <li>timestamp</li>
-        <li>individual_id</li>
-        <li>sex (if known)</li>
-        <li>age_class</li>
-        <li>role (sentinel / babysitting / foraging / grooming / aggression / alarm call)</li>
-        <li>interaction_target</li>
-        <li>context (predator presence / pup season / drought / territory conflict)</li>
-      </ul>
-
-      <hr />
-
-      <h2>Methods (transparent and readable)</h2>
-      <p><strong>1) From observation to events</strong><br />We transform field notes into “events”, then aggregate them by day/week/season to compare patterns.</p>
-      <p>
-        <strong>2) Measuring power without moralizing it</strong><br />“Power” is operationalized as measurable control over access, movement, reproduction, and sanctions.
-      </p>
-      <p>
-        <strong>3) Measuring care work as a system</strong><br />Care work is operationalized as measurable investment in pup care, vigilance, and conflict dampening.
-      </p>
-
-      <hr />
-
-      <h2>Findings</h2>
-      <p><strong>Finding 1: Cooperation is infrastructure</strong><br />If your thesis supports it, show that vigilance and care work are survival-critical labor that scales with risk.</p>
-      <figure class="interactive wide-bleed" id="b-prop-widget">
-        <div class="interactive__bar">
-          <p class="interactive__title">Interactive figure — Call proportions over age (REP, DIG, CC)</p>
-          <div class="interactive__controls">
-            <span>Model-based predictions from `CallProportions` (brms)</span>
+          <div class="note-box reveal">
+            <div class="note-box-label">Methodology note</div>
+            <p>
+              55 pups across 25 litters were tracked from emergence (≈30 days) to nutritional independence
+              (≈120–130 days). 491 focal recordings were made using a directional microphone from less than one
+              metre away. All statistical analyses used Bayesian multilevel models.
+            </p>
           </div>
         </div>
-        <div class="embed-frame" style="height: 980px">
-          <iframe
-            title="Call proportions over age (interactive)"
-            src="figures/CallProportions.html"
-            loading="lazy"
-            referrerpolicy="no-referrer"
-          ></iframe>
-        </div>
-        <p class="interactive__note">
-          If this is blank, generate it by running <code>scripts/call_proportions_interactive.R</code>
-          (writes <code>figures/CallProportions.html</code>).
-        </p>
-      </figure>
-      <figure>
-        <img src="figures/fig01-activity-budget.png" alt="Figure 1 — Daily activity budget" />
-        <figcaption>Figure 1. Placeholder caption. Replace with your chart: e.g., “Share of observed minutes by role across a typical day, split by predator presence.”</figcaption>
-      </figure>
+      </section>
 
-      <p><strong>Finding 2: Dominance is situational</strong><br />Influence can be context-dependent; who leads, who signals, who punishes, who nourishes can differ across situations.</p>
-      <figure>
-        <img src="figures/fig02-interaction-network.png" alt="Figure 2 — Interaction network" />
-        <figcaption>Figure 2. Placeholder caption. Replace with your network plot: nodes = individuals; edges = grooming/support/aggression; color = role or sex; thickness = frequency.</figcaption>
-      </figure>
-
-      <p><strong>Finding 3: Reproduction is conflict, managed socially</strong><br />The story is the social technology that manages conflict: alliances, expulsions, reconciliation, rebalancing cohesion.</p>
-      <figure>
-        <img src="figures/fig03-seasonal-timeline.png" alt="Figure 3 — Seasonal timeline" />
-        <figcaption>Figure 3. Placeholder caption. Replace with a timeline: births, expulsions, rainfall, predator events, group splits/merges.</figcaption>
-      </figure>
-
-      <p><strong>Developmental milestones (ontogeny)</strong><br />SEMI → PEAK → FULL milestone ages shown together, by maternal treatment and sex.</p>
-      <figure class="interactive wide-bleed">
-        <div class="interactive__bar">
-          <p class="interactive__title">Interactive Milestone trajectory</p>
-          <div class="interactive__controls">
-            <span>Filter treatment/sex to compare trajectories</span>
+      <section>
+        <div class="container">
+          <div class="section-label reveal">Paper I · finding</div>
+          <div class="sec-head reveal">
+            <div class="sec-num">02</div>
+            <h2>A <em>robust</em> trajectory vs a fragile one</h2>
           </div>
+          <p class="reveal">
+            Meerkat pups pass through three vocal phases as they grow: a period of <strong>full dependence</strong>
+            (repeat calls, constant begging), a period of <strong>semi-dependence</strong> (digging calls, practising
+            foraging while still soliciting food), and finally <strong>full independence</strong> (adult close calls,
+            no more begging).
+          </p>
+          <p class="reveal">
+            The question was: does maternal androgen status change how quickly pups move through these phases,
+            and how sensitive they are to environmental conditions along the way?
+          </p>
+
+          <div class="timeline reveal" aria-label="Timeline">
+            <div class="tl-row">
+              <div class="tl-age">≈30 days</div>
+              <div class="tl-body">
+                <h4>All pups emerge and begin begging</h4>
+                <p>DC pups — especially daughters — already show higher repeat call proportions. DT pups show the weakest early begging.</p>
+              </div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-age">≈50–60 days</div>
+              <div class="tl-body">
+                <h4>DT pups transition to digging calls — earliest, but not by choice</h4>
+                <p>Their weak begging fails to secure adequate provisioning, pushing them toward foraging before they’re ready.</p>
+              </div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-age">≈75 days</div>
+              <div class="tl-body">
+                <h4>DC pups hit peak digging call proportions — and transition fastest</h4>
+                <p>Having built up energy reserves from more effective early begging, DC pups move through semi-dependence efficiently.</p>
+              </div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-age">≈88 days</div>
+              <div class="tl-body">
+                <h4>DC offspring reach full independence</h4>
+                <p>Significantly earlier than SC (≈110 days) or DT (≈125 days) offspring.</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="reveal">
+            Crucially, DC offspring showed a <strong>canalised</strong> developmental trajectory — robust even under
+            drought conditions or in larger, more competitive groups. SC and DT offspring showed greater plasticity:
+            their vocal development was more sensitive to rainfall, group size, and competition.
+          </p>
         </div>
-        <div class="embed-frame" style="height: 980px">
-          <iframe
-            title="Milestones trajectory (interactive)"
-            src="figures/Milestones_Combined.html"
-            loading="lazy"
-            referrerpolicy="no-referrer"
-          ></iframe>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="section-label reveal">Paper II — acoustic structure</div>
+          <div class="sec-head reveal">
+            <div class="sec-num">03</div>
+            <h2>How loud, how fast, <em>how often</em></h2>
+          </div>
+          <p class="reveal">
+            The second study went deeper: not just which call type a pup was using, but the fine-grained acoustic
+            structure of each call. Duration, inter-call interval, and call rate — the rhythmic properties that
+            determine how insistent, how urgent, how “expensive” a beg sounds to adult helpers.
+          </p>
+          <p class="reveal">
+            The pattern was consistent. DC daughters produced the most intense begging: shortest calls, shortest
+            gaps between calls, highest rates. DT daughters produced the least intense. And the effect was most
+            pronounced in daughters — not sons.
+          </p>
+
+          <figure class="interactive wide-bleed reveal" id="b-prop-widget">
+            <div class="interactive__bar">
+              <p class="interactive__title">Interactive figure — Call proportions over age (REP, DIG, CC)</p>
+              <div class="interactive__controls">
+                <span>Model-based predictions · brms</span>
+              </div>
+            </div>
+            <div class="embed-frame" style="height: 980px">
+              <iframe
+                title="Call proportions over age (interactive)"
+                src="figures/CallProportions.html"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              ></iframe>
+            </div>
+            <p class="interactive__note">
+              If this is blank, generate it by running <code>scripts/call_proportions_interactive.R</code>
+              (writes <code>figures/CallProportions.html</code>).
+            </p>
+          </figure>
         </div>
-        <p class="interactive__note">
-          If this is blank, generate it by running <code>scripts/milestones_interactive.R</code>
-          (writes <code>figures/Milestones_Combined.html</code> and <code>figures/Milestones_Combined_files/</code>).
-        </p>
-      </figure>
+      </section>
 
-      <hr />
+      <section>
+        <div class="container">
+          <div class="section-label reveal">The numbers</div>
+          <div class="sec-head reveal">
+            <div class="sec-num">04</div>
+            <h2>What the data <em>showed</em></h2>
+          </div>
+          <div class="findings-grid reveal" role="list">
+            <div class="finding-card" role="listitem">
+              <div>
+                <div class="finding-num">~88</div>
+                <div class="finding-meta">days to nutritional independence · DC offspring</div>
+              </div>
+              <p class="finding-desc">
+                The earliest of the three groups. Earlier independence means more time to grow before competition intensifies.
+              </p>
+            </div>
+            <div class="finding-card" role="listitem">
+              <div>
+                <div class="finding-num">~110</div>
+                <div class="finding-meta">days to nutritional independence · SC offspring</div>
+              </div>
+              <p class="finding-desc">
+                A significant lag behind DC offspring — especially pronounced in SC males, the slowest of all groups.
+              </p>
+            </div>
+            <div class="finding-card" role="listitem">
+              <div>
+                <div class="finding-num">~125</div>
+                <div class="finding-meta">days to nutritional independence · DT offspring</div>
+              </div>
+              <p class="finding-desc">
+                Despite transitioning to semi-dependence first, DT pups take the longest to become truly self-sufficient.
+              </p>
+            </div>
+          </div>
 
-      <h2>Field moments (photos)</h2>
-      <figure>
-        <img src="pics/photo01-sentinel.jpg" alt="Photo 1 — Sentinel posture" />
-        <figcaption>Photo 1. Placeholder caption. Where/when was this taken? What behavior does it illustrate?</figcaption>
-      </figure>
-      <figure>
-        <img src="pics/photo02-pup-care.jpg" alt="Photo 2 — Pup care" />
-        <figcaption>Photo 2. Placeholder caption. What care behavior is visible, and why does it matter for the argument?</figcaption>
-      </figure>
+          <p class="reveal">
+            <strong>Developmental milestones (ontogeny)</strong><br />
+            SEMI → PEAK → FULL milestone ages shown together, by maternal treatment and sex.
+          </p>
+        </div>
+        <figure class="interactive wide-bleed reveal">
+          <div class="interactive__bar">
+            <p class="interactive__title">Interactive figure — Milestone trajectory</p>
+            <div class="interactive__controls">
+              <span>Filter treatment/sex to compare trajectories</span>
+            </div>
+          </div>
+          <div class="embed-frame" style="height: 980px">
+            <iframe
+              title="Milestones trajectory (interactive)"
+              src="figures/Milestones_Combined.html"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+            ></iframe>
+          </div>
+          <p class="interactive__note">
+            If this is blank, generate it by running <code>scripts/milestones_interactive.R</code>
+            (writes <code>figures/Milestones_Combined.html</code> and <code>figures/Milestones_Combined_files/</code
+            >).
+          </p>
+        </figure>
+      </section>
 
-      <hr />
+      <section>
+        <div class="container">
+          <div class="section-label reveal">Field</div>
+          <div class="sec-head reveal">
+            <div class="sec-num">05</div>
+            <h2>Field moments <em>(photos)</em></h2>
+          </div>
+        <figure class="reveal">
+          <img src="pics/photo01-sentinel.jpg" alt="Photo 1 — Sentinel posture" />
+          <figcaption>
+            Photo 1. Placeholder caption. Where/when was this taken? What behavior does it illustrate?
+          </figcaption>
+        </figure>
+        <figure class="reveal">
+          <img src="pics/photo02-pup-care.jpg" alt="Photo 2 — Pup care" />
+          <figcaption>
+            Photo 2. Placeholder caption. What care behavior is visible, and why does it matter for the
+            argument?
+          </figcaption>
+        </figure>
+        </div>
+      </section>
 
-      <h2>Interpretation: what “against patriarchy” means here</h2>
-      <ul>
-        <li><strong>“Patriarchy” is not a synonym for “biology.”</strong></li>
-        <li>When people use animal stories to naturalize human domination, they cherry-pick.</li>
-        <li>A close, data-grounded look shows multiple viable ways to distribute risk, care, and control.</li>
-      </ul>
-      <p><strong>Thesis claim</strong>: [YOUR THESIS CLAIM IN ONE SENTENCE]</p>
+      <section>
+        <div class="container">
+          <div class="section-label reveal">Interpretation</div>
+          <div class="sec-head reveal">
+            <div class="sec-num">06</div>
+            <h2>The thesis</h2>
+          </div>
+          <p class="reveal">
+            This isn’t just a story about meerkats. It’s a proof of concept: hormonal status can be a heritable
+            social resource, passed from mother to daughter through biology, not behaviour.
+          </p>
+          <div class="divider reveal"><span>claim</span></div>
+          <p class="reveal"><strong>Thesis claim</strong>: [YOUR THESIS CLAIM IN ONE SENTENCE]</p>
+        </div>
+      </section>
 
-      <hr />
+      <section>
+        <div class="container">
+          <div class="section-label reveal">Ethics</div>
+          <div class="sec-head reveal">
+            <div class="sec-num">07</div>
+            <h2>Limitations and ethics</h2>
+          </div>
+        <ul class="reveal">
+          <li>
+            <strong>Translation risk</strong>: Animal behavior does not map cleanly onto human categories
+            (gender, consent, family).
+          </li>
+          <li>
+            <strong>Observation bias</strong>: Visibility differs by individual and environment; some behaviors
+            are undercounted.
+          </li>
+          <li><strong>Data gaps</strong>: [MISSING DATA TYPES] can affect conclusions.</li>
+          <li>
+            <strong>Interpretive humility</strong>: This project critiques human narratives more than it “explains”
+            meerkats.
+          </li>
+        </ul>
+        </div>
+      </section>
 
-      <h2>Limitations and ethics</h2>
-      <ul>
-        <li><strong>Translation risk</strong>: Animal behavior does not map cleanly onto human categories (gender, consent, family).</li>
-        <li><strong>Observation bias</strong>: Visibility differs by individual and environment; some behaviors are undercounted.</li>
-        <li><strong>Data gaps</strong>: [MISSING DATA TYPES] can affect conclusions.</li>
-        <li><strong>Interpretive humility</strong>: This project critiques human narratives more than it “explains” meerkats.</li>
-      </ul>
-
-      <hr />
-
-      <h2>Credits</h2>
-      <ul>
-        <li><strong>Text &amp; analysis</strong>: [YOUR NAME]</li>
-        <li><strong>Data</strong>: [DATA SOURCES]</li>
-        <li><strong>Code/tools</strong>: [R / Python / Flourish / RAWGraphs / D3 / etc.]</li>
-        <li><strong>Photos</strong>: [YOUR NAME / LICENSE]</li>
-      </ul>
+      <section>
+        <div class="container">
+          <div class="section-label reveal">Credits</div>
+          <div class="sec-head reveal">
+            <div class="sec-num">08</div>
+            <h2>Credits</h2>
+          </div>
+          <ul class="reveal">
+            <li><strong>Text &amp; analysis</strong>: [YOUR NAME]</li>
+            <li><strong>Data</strong>: [DATA SOURCES]</li>
+            <li><strong>Code/tools</strong>: [R / Python / Flourish / RAWGraphs / D3 / etc.]</li>
+            <li><strong>Photos</strong>: [YOUR NAME / LICENSE]</li>
+          </ul>
+        </div>
+      </section>
     </main>
+
+    <script>
+      const progress = document.getElementById("progress");
+      window.addEventListener("scroll", () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = pct + "%";
+      });
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              observer.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+
+      document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+    </script>
   </body>
 </html>
 

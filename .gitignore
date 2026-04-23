@@ -7,3 +7,6 @@ models/*.rds
 # Accidental nested output folder (Windows/Drive can lock it)
 figures/figures/
 
+# Local scratch (may be access-restricted by sync tools)
+text/
+
